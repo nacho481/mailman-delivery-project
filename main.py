@@ -269,12 +269,26 @@ def m_deliver_packages(truck: Truck) -> None:
         logging.error(f'No pending packages found for the truck: {e}')
 
 
-def m_get_user_time():
-    """Prompt user to ask the status of a package(s) at a particular time."""
+def m_get_user_time() -> datetime.timedelta:
+    """Prompt the user to enter a specific time in HH:MM format to check the status of a package (or packages).
+
+        This function validates the user input to ensure it's in the correct format (HH:MM) then it'll return the
+        datetime.timedelta object provided the user's input. The loop will continue to prompt the user until their
+        input is valid
+
+    :returns
+        datetime.timedelta: A timedelta object representing the user-provided time.
+
+    :raises
+        ValueError: If the user enters and invalid format.
+    """
     while True:
         user_time = input("Enter time to check the status of a package in HH:MM format: ")
         try:
-            (h, m) = user_time.split(':')
+            (h, m) = map(int, user_time.split(':'))
+            # Validate hours and minutes
+            if not 0 <= h <= 23 or not 0 <= m <= 59:
+                raise ValueError('Invalid time entered. Hours are between 0-23 and minutes between 0-59.')
             return datetime.timedelta(hours=int(h), minutes=int(m))
         except ValueError:
             print("Invalid time format. Please try again (HH:MM).")  # prompt user to re-enter value correctly
