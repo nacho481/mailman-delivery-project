@@ -193,11 +193,6 @@ def m_update_truck_status(truck: Truck, package: Package, distance: float):
     :raises
         ValueError: If the distance is negative or zero"""
 
-    # Determine if distance is less than or equal to 0.
-    if distance <= 0:
-        logging.error(f'Invalid distance provided: {distance}')
-        raise ValueError('Distance traveled cannot be negative or zero.')
-
     # Attempt to update status information
     try:
         truck.m_packages.append(package.m_ID)
