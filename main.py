@@ -5,7 +5,7 @@ import csv
 import datetime
 import logging
 
-from typing import List, Tuple
+
 from Truck import Truck
 from HashTable import HashTable
 from Package import Package
