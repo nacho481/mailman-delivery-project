@@ -317,13 +317,21 @@ def m_get_package_selection():
 
 
 def main():
+    """Entry point for the Western Governors University Parcel Service program.
+
+    It displays as the program's starting point, showing total miles and a welcoming message. The user will be provided
+    options to check the delivery status of 1 or all packages depending on their selection.
+
+    :raises
+        ValueError: If invalid user input is encountered during the time conversion or package ID lookup.
+    """
     # title
     print("Western Governors University Parcel Service")  # Show delivery service name
     # total miles for all the trucks
     print(f"Total miles: {m_truck1.m_mileage + m_truck2.m_mileage + m_truck3.m_mileage} miles")
 
     while True:
-        text = input("To start please type 's' for start")
+        text = input("To start please type 's' for start: ")
         if text == 's':
             try:
                 convert_timedelta = m_get_user_time()  # Get time from user
