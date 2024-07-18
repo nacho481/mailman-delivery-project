@@ -9,6 +9,7 @@ import Truck
 import logging
 from HashTable import HashTable
 from Package import Package
+from config import M_TRUCK_CONFIGS, M_PACKAGE_FILE, M_DISTANCE_FILE, M_ADDRESS_FILE
 
 # CONSTANTS
 M_TRUCK_CAPACITY = 16
@@ -339,7 +340,8 @@ def main():
     # title
     print("Western Governors University Parcel Service")  # Show delivery service name
     # total miles for all the trucks
-    print(f"Total miles: {m_truck1.m_mileage + m_truck2.m_mileage + m_truck3.m_mileage} miles")
+    # print(f"Total miles: {m_truck1.m_mileage + m_truck2.m_mileage + m_truck3.m_mileage} miles")
+    print(f'Total miles: {trucks[0].m_mileage + trucks[1].m_mileage + trucks[2].m_mileage}')
 
     while True:
         text = input("To start please type 's' for start: ")
@@ -375,42 +377,19 @@ def main():
 
 logging.basicConfig(filename='app.log', level=logging.DEBUG)  # configure for error tracking
 
-m_package_file = m_load_csv_file('CSV/Package_File.csv')  # Load package file information
-m_distance_file = m_load_csv_file('CSV/Distance_File.csv')  # Load distance information
-m_address_file = m_load_csv_file('CSV/Address_File.csv')  # Load address information
+m_package_file = m_load_csv_file(M_PACKAGE_FILE)  # Load package file information
+m_distance_file = m_load_csv_file(M_DISTANCE_FILE)  # Load distance information
+m_address_file = m_load_csv_file(M_ADDRESS_FILE)  # Load address information
 
-
-m_truck1 = Truck.Truck(M_TRUCK_CAPACITY,
-                       M_TRUCK_SPEED,
-                       [1, 13, 14, 15, 16, 20, 29, 30, 31, 34, 37, 40],
-                       M_STARTING_MILEAGE,
-                       M_HUB_ADDRESS,
-                       datetime.timedelta(hours=M_STARTING_TIME),
-                       M_INITIAL_LOAD
-                       )
-m_truck2 = Truck.Truck(M_TRUCK_CAPACITY,
-                       M_TRUCK_SPEED,
-                       [3, 6, 12, 17, 18, 19, 21, 22, 23, 24, 26, 27, 35, 36, 38, 39],
-                       M_STARTING_MILEAGE,
-                       M_HUB_ADDRESS,
-                       datetime.timedelta(hours=M_STARTING_TIME),
-                       M_INITIAL_LOAD)
-
-m_truck3 = Truck.Truck(M_TRUCK_CAPACITY,
-                       M_TRUCK_SPEED,
-                       [2, 4, 5, 6, 7, 8, 9, 10, 11, 25, 28, 32, 33],
-                       M_STARTING_MILEAGE,
-                       M_HUB_ADDRESS,
-                       datetime.timedelta(hours=M_STARTING_TIME),
-                       M_INITIAL_LOAD)
+trucks = [Truck.Truck(**config) for config in M_TRUCK_CONFIGS]
 
 m_package_hash_table = HashTable()
-m_load_package_data("CSV/Package_File.csv", m_package_hash_table)
+m_load_package_data(M_PACKAGE_FILE, m_package_hash_table)
+m_deliver_packages(trucks[0])
+m_deliver_packages(trucks[1])
+trucks[2].m_departure_time = min(trucks[0].m_time, trucks[1].m_time)
+m_deliver_packages(trucks[2])
 
-m_deliver_packages(m_truck1)
-m_deliver_packages(m_truck2)
-m_truck3.m_departure_time = min(m_truck1.m_time, m_truck2.m_time)
-m_deliver_packages(m_truck3)
 
 if __name__ == "__main__":
     main()
