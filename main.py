@@ -134,8 +134,10 @@ def m_distance_between(x_value: int, y_value: int) -> float:
     try:
         # check for out of bounds
         if x_value < 0 or x_value >= len(m_distance_file):
+            logging.error(f'x_value ({x_value}) is out of bounds for the distance matrix')
             raise IndexError(f'x_value ({x_value}) is out bounds for the distance matrix.')
         if y_value < 0 or y_value >= len(m_distance_file):
+            logging.error(f'y_value ({y_value}) is out of bounds for the distance matrix')
             raise IndexError(f'y_value ({y_value}) is out of bounds for the distance matrix')
 
         # Access distance value and convert to float
@@ -143,6 +145,7 @@ def m_distance_between(x_value: int, y_value: int) -> float:
         if distance == '':
             distance = m_distance_file[y_value][x_value]
             if distance == '':
+                logging.error('Distance is not found between locations')
                 raise ValueError('Distance is not found between locations')
         return float(distance)
     except (IndexError, ValueError) as e:
@@ -190,16 +193,22 @@ def m_update_truck_status(truck: Truck, package: Package, distance: float):
     :raises
         ValueError: If the distance is negative or zero"""
 
+    # Determine if distance is less than or equal to 0.
     if distance <= 0:
         logging.error(f'Invalid distance provided: {distance}')
         raise ValueError('Distance traveled cannot be negative or zero.')
 
-    truck.m_packages.append(package.m_ID)
-    truck.m_mileage += distance
-    truck.m_address = package.m_address
-    truck.m_time += datetime.timedelta(hours=distance / truck.m_speed)
-    package.m_delivery_time = truck.m_time
-    package.m_departure_time = truck.m_departure_time
+    # Attempt to update status information
+    try:
+        truck.m_packages.append(package.m_ID)
+        truck.m_mileage += distance
+        truck.m_address = package.m_address
+        truck.m_time += datetime.timedelta(hours=distance / truck.m_speed)
+        package.m_delivery_time = truck.m_time
+        package.m_departure_time = truck.m_departure_time
+    except (AttributeError, IndexError) as e:
+        logging.error(f'Error updating truck {truck.m_ID} status: {e}')
+        raise
 
 
 def m_find_nearest_package(truck: Truck, pending_packages: List[Package]) -> Tuple[Package, float]:
