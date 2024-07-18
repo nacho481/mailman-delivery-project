@@ -85,7 +85,7 @@ def m_load_package_data(filename: str, hash_table: HashTable) -> None:
         raise
 
 
-def m_extract_address(address):
+def m_extract_address(address: str) -> int:
     """
     Provided the address, this will extract the label (vertex ID).
 
@@ -93,6 +93,13 @@ def m_extract_address(address):
     field matches the provided 'address' argument. If a match is found, this will return the corresponding
     vertex ID.
 
+    :arg
+        address (str): The address string to search for
+
+    :return
+        int: The vertex ID (label) associated with the address, or it will raise an exception if it's not found.
+    :raises
+        ValueError: If the address data is not a list of a list OR if the vertex ID cannot be converted to an integer
     """
 
     if not isinstance(m_address_file, list):
