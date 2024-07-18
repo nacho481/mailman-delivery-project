@@ -250,7 +250,19 @@ def m_deliver_packages(truck: Truck) -> None:
         truck (Truck): The truck object with packages to be delivered
 
     :raises
-        ValueError: If there are no pending packages in the truck. """
+        ValueError: If there are no pending packages in the truck.
+
+    Algorithm:
+        1. Create a list of pending packages from the truck's package IDs.
+        2. Clear the truck's current package list.
+        3. While there are pending packages.
+            a. Find the nearest undelivered package
+            b. Add the package to the truck's delivery list
+            c. Update the truck's mileage, address and time
+            d. Update package's delivery and departure time.
+
+    Note: This function assumes the global m_package_hash_table is available
+        """
 
     try:
         # load pending packages yet to be delivered
@@ -313,7 +325,6 @@ def m_get_package_selection():
                 raise ValueError("Invalid selection. Please enter 1 or 2.")
         except ValueError as e:
             print(f'Invalid input: {e}. Please enter 1 or 2.')  # More informative error message
-
 
 
 def main():
