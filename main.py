@@ -10,42 +10,7 @@ import logging
 from HashTable import HashTable
 from Package import Package
 from config import M_TRUCK_CONFIGS, M_PACKAGE_FILE, M_DISTANCE_FILE, M_ADDRESS_FILE
-
-# CONSTANTS
-M_TRUCK_CAPACITY = 16
-M_TRUCK_SPEED = 18
-M_HUB_ADDRESS = '4001 South 700 East'
-M_STARTING_MILEAGE = 0.0
-M_STARTING_TIME = 8
-M_INITIAL_LOAD = None
-
-
-def m_load_csv_file(filename: str) -> List[List[str]]:
-    """
-    Loads a CSV file into a lists of lists
-
-    :arg
-        filename: The path to the CSV file
-
-    :returns
-        A lists of lists where each inner list represents a row from the CSV file.
-
-    :raises
-        FileNotFound: When a file is not found
-        csv.Error parsing the CSV file sent
-        :exception
-    """
-    try:
-        with open(filename, 'r') as file:
-            return list(csv.reader(file))
-    except FileNotFoundError:
-        logging.error(f'File not found {filename}')
-        raise
-    except csv.Error as e:
-        logging.error(f'CSV error in file {filename}: {e}')
-        raise
-    except Exception as e:
-        logging.error(f'Unexpected error when reading {filename}: {e}')
+from utils import m_load_csv_file
 
 
 def m_load_package_data(filename: str, hash_table: HashTable) -> None:
