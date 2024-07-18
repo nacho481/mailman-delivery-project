@@ -285,7 +285,7 @@ def m_get_user_time() -> datetime.timedelta:
     while True:
         user_time = input("Enter time to check the status of a package in HH:MM format: ")
         try:
-            (h, m) = map(int, user_time.split(':'))
+            (h, m) = map(int, user_time.split(':'))  # specify data type then iterable which is the split string
             # Validate hours and minutes
             if not 0 <= h <= 23 or not 0 <= m <= 59:
                 raise ValueError('Invalid time entered. Hours are between 0-23 and minutes between 0-59.')
@@ -295,13 +295,25 @@ def m_get_user_time() -> datetime.timedelta:
 
 
 def m_get_package_selection():
+    """Prompts the user to select whether they want an update on one particular package or an update on
+    all the packages. It also validates the user's input.
+
+    :returns
+        int: An integer representing the user's selection (1 for one package, 2 for all).
+    :raises
+        ValueError: If the user enters an invalid input that cannot be converted to an integer."""
     # Ensures we get right data type from user
     while True:
-        second_input = input("Enter (1 for 1 package) or (2 for all packages): ")
-        if second_input in ("1", "2"):  # We want either 1 or 2
-            return int(second_input)
-        else:
-            print("Invalid selection. Please enter 1 or 2.")  # Reprompt the user to enter a correct value
+        selection = input("Enter (1 for 1 package) or (2 for all packages): ")
+        try:
+            if selection in ("1", "2"):  # We want either 1 or 2
+                return int(selection)
+            else:
+                # Reprompt the user to enter a correct value
+                raise ValueError("Invalid selection. Please enter 1 or 2.")
+        except ValueError as e:
+            print(f'Invalid input: {e}. Please enter 1 or 2.')  # More informative error message
+
 
 
 def main():
