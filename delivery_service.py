@@ -11,17 +11,49 @@ from utils import DataManager
 
 class DeliveryService:
     def __init__(self, trucks: List[Truck], package_hash_table: HashTable, data_manager: DataManager):
+        """
+        Initializes the DeliveryService object.
+
+        :arg
+            trucks (List[Truck]): A list of truck objects representing the delivery vehicles
+            package_hash_table (HashTable): A HashTable used for efficient lookup by ID
+            data_manager (DataManager): A DataManager object is used for loading and distance calculations
+
+        :raises
+            :TypeError
+                - If any of the arguments are not of the expected types (List[Truck], HashTable, DataManager).
+        """
+        if not isinstance(trucks, list) or not all(isinstance(truck, Truck) for truck in trucks):
+            raise TypeError('Trucks arguments must be a list of truck objects')
+
         self.m_trucks = trucks
         self.m_package_hash_table = package_hash_table
         self.m_data_manager = data_manager
 
     def m_deliver_packages(self):
+        """
+        Delivers all pending packages using the Nearest Neighbor Algorithm for each truck.
+        This function iterates through the list of trucks calling the "_deliver_packages_for_truck() method' for each
+        truck, keeping in mind that there are only 2 drives and 3 trucks, and optimizes a solution for that predicament.
+
+        :raises
+            IndexError:
+                - If the list of trucks is empty
+        """
+        logging.info(f'Starting delivery for all trucks')
+
+        if not self.m_trucks:
+            logging.error('No trucks found for delivery. Please ensure trucks are available.')
+            raise IndexError('No trucks available for delivery')
+
         self._deliver_packages_for_truck(self.m_trucks[0])
         self._deliver_packages_for_truck(self.m_trucks[1])
 
         # Set the departure time for the 3rd truck
         self.m_trucks[2].m_departure_time = min(self.m_trucks[0].m_time, self.m_trucks[1].m_time)
         self._deliver_packages_for_truck(self.m_trucks[2])  # deliver packages for 3rd truck
+
+        logging.info(f'Completed delivery for all trucks')
 
     def _deliver_packages_for_truck(self, truck: Truck):
         """Delivers all pending packages using the Nearest Neighbor Algorithm.
@@ -88,10 +120,6 @@ class DeliveryService:
 
         try:
             # Find nearest package using distance calculation and min function
-            # nearest_package = min(pending_packages,
-            #                       key=lambda p: self.m_data_manager.m_calculate_distance(truck.m_address, p.m_address))
-            # distance = self.m_calculate_distance(truck.m_address, nearest_package.m_address)
-            # return nearest_package, distance
             return min(
                 ((package, self.m_data_manager.m_calculate_distance(truck.m_address, package.m_address))
                  for package in pending_packages),
@@ -127,4 +155,10 @@ class DeliveryService:
             raise
 
     def m_get_total_mileage(self):
+        """Calculates the total mileage driven by all trucks.
+
+        This function will iterate through the list of trucks incrementing their mileage attributes summing it.
+
+        :returns
+            float: The total mileage driven by all trucks combined."""
         return sum(truck.m_mileage for truck in self.m_trucks)
