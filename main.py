@@ -47,23 +47,42 @@ def m_load_csv_file(filename: str) -> List[List[str]]:
         logging.error(f'Unexpected error when reading {filename}: {e}')
 
 
-def m_load_package_data(filename, hash_table):
-    """The m_load_package_data will load in package information for each package opening """
-    with open(filename) as package_info:
-        package_data = csv.reader(package_info)
-        for p in package_data:
-            pID = int(p[0])
-            pAddress = p[1]
-            pCity = p[2]
-            pState = p[3]
-            pZip = p[4]
-            pDeadline = p[5]
-            pWeight = p[6]
-            pStatus = "At Hub"
+def m_load_package_data(filename: str, hash_table: HashTable) -> None:
+    """The m_load_package_data will load in package information for each package opening
+    :arg
+        filename (str): The file being passed
+        hash_table (HashTable): The hash table data structure being used
 
-            # Create package object
-            p_obj = Package(pID, pAddress, pCity, pState, pZip, pDeadline, pWeight, pStatus)
-            hash_table.m_insert(pID, p_obj)  # insert p_object
+    :returns
+        Nothing, just loads data into the truck
+
+    :raises
+        FileNotFoundError: If the specified CSV file is not found
+        ValueError: If there are errors parsing the CSV data (e.g., invalid data types)
+
+    """
+    try:
+        with open(filename) as package_info:
+            package_data = csv.reader(package_info)
+            for p in package_data:
+                try:
+                    pID = int(p[0])
+                    pAddress = p[1]
+                    pCity = p[2]
+                    pState = p[3]
+                    pZip = p[4]
+                    pDeadline = p[5]
+                    pWeight = p[6]
+                    pStatus = "At Hub"
+
+                    # Create package object
+                    p_obj = Package(pID, pAddress, pCity, pState, pZip, pDeadline, pWeight, pStatus)
+                    hash_table.m_insert(pID, p_obj)  # insert p_object
+                except (ValueError, TypeError) as e:
+                    logging.error(f'Error parsing row in {filename}: {p}. Exception {e}')
+    except FileNotFoundError as e:
+        logging.error(f'File not found {filename}')
+        raise
 
 
 def m_extract_address(address):
@@ -75,7 +94,7 @@ def m_extract_address(address):
 
 
 def m_distance_between(x_value, y_value):
-    """References weighted matrix providing indices for the row and column of the elemnt returning it as a float
+    """References weighted matrix providing indices for the row and column of the element returning it as a float
     point value."""
     if m_distance_file[x_value][y_value] == '':
         return float(m_distance_file[y_value][x_value])
