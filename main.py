@@ -178,7 +178,22 @@ def m_calculate_distance(address1: str, address2: str) -> float:
 
 
 def m_update_truck_status(truck: Truck, package: Package, distance: float):
-    """Update the truck's status after delivering a package"""
+    """Update the truck's status after delivering a package by updating the package's attributes in the truck and the
+    truck itself. This function updates the truck's package list, total mileage, current address, travel time by
+    dividing distance by its speed, and updates the package's delivery and departure time.
+
+    :arg
+        truck (Truck): The truck object whose status needs to be updated.
+        package (Package): The package object represents the package being delivered.
+        distance (float): The distance the truck driver traveled to deliver the package.
+
+    :raises
+        ValueError: If the distance is negative or zero"""
+
+    if distance <= 0:
+        logging.error(f'Invalid distance provided: {distance}')
+        raise ValueError('Distance traveled cannot be negative or zero.')
+
     truck.m_packages.append(package.m_ID)
     truck.m_mileage += distance
     truck.m_address = package.m_address
