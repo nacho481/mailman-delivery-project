@@ -212,11 +212,35 @@ def m_update_truck_status(truck: Truck, package: Package, distance: float):
 
 
 def m_find_nearest_package(truck: Truck, pending_packages: List[Package]) -> Tuple[Package, float]:
-    """Find the nearest package to truck's location."""
-    nearest_package = min(pending_packages,
-                          key=lambda p: m_calculate_distance(truck.m_address, p.m_address))
-    distance = m_calculate_distance(truck.m_address, nearest_package.m_address)
-    return nearest_package, distance
+    """Find the nearest package in the list of packages relative to the truck's location.
+
+    The function uses the m_calculate_distance() method used to find the distance between the truck's current
+    address (truck.m_address) and each pending package's stored in (pending_packages). The min function is used
+    with a custom key to find the package with minimum distance.
+
+    :arg
+        truck (Truck): The truck object used to deliver the nearest package
+        pending_packages (List[Package]): A list of package objects representing packages pending to be delivered.
+
+    :returns
+        Tuple[Package, float]: A tuple containing the nearest package and the corresponding distance.
+
+    :raises
+        ValueError: If there are no pending packages in the provided list"""
+
+    if not pending_packages:
+        logging.error('No pending packages to search for the nearest one.')
+        raise ValueError('No pending packages available for delivery')
+
+    try:
+        # Find nearest package using distance calculation and min function
+        nearest_package = min(pending_packages,
+                              key=lambda p: m_calculate_distance(truck.m_address, p.m_address))
+        distance = m_calculate_distance(truck.m_address, nearest_package.m_address)
+        return nearest_package, distance
+    except Exception as e:
+        logging.error(f'Error finding nearest package for truck {truck.m_ID}: {e}')
+        raise
 
 
 def m_deliver_packages(truck: Truck):
