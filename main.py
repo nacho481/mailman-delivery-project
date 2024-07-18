@@ -81,7 +81,7 @@ def m_load_package_data(filename: str, hash_table: HashTable) -> None:
                 except (ValueError, TypeError) as e:
                     logging.error(f'Error parsing row in {filename}: {p}. Exception {e}')
     except FileNotFoundError as e:
-        logging.error(f'File not found {filename}')
+        logging.error(f'File not found {filename}: Exception {e}')
         raise
 
 
@@ -151,10 +151,30 @@ def m_distance_between(x_value: int, y_value: int) -> float:
 
 
 def m_calculate_distance(address1: str, address2: str) -> float:
-    """Calculate the distance between 2 addresses"""
-    idx1 = m_extract_address(address1)
-    idx2 = m_extract_address(address2)
-    return m_distance_between(idx1, idx2)
+    """A helper method to calculate the distance between 2 addresses, one that is passed and the second
+    referencing the adjacent matrix.
+
+    This function utilizes the 'm_extract_address()' method to obtain the vertex's label, in this case, their ID
+    respectively to 'address1' and 'address2'. The distance is determined with the return statement calling
+    the 'm_distance_between', functionality is discussed in the respective method.
+
+    :arg
+        address1 (str): The first address is a string
+        address2 (str): The second address is a string.
+
+    :returns
+        float: The distance between the two addresses or raises an exception if an error occurs.
+
+    :raises
+        ValueError: If one or both addresses cannot be found in the address CSV file."""
+    try:
+        # Extract vertex labels for addresses
+        idx1 = m_extract_address(address1)
+        idx2 = m_extract_address(address2)
+        return m_distance_between(idx1, idx2)  # Find distance using m_distance_between() method
+    except ValueError as e:
+        logging.error(f'Error calculating distance: {e}')
+        raise
 
 
 def m_update_truck_status(truck: Truck, package: Package, distance: float):
