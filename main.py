@@ -6,9 +6,9 @@ import datetime
 from typing import List, Tuple
 
 import Truck
+import logging
 from HashTable import HashTable
 from Package import Package
-
 
 # CONSTANTS
 M_TRUCK_CAPACITY = 16
@@ -17,6 +17,34 @@ M_HUB_ADDRESS = '4001 South 700 East'
 M_STARTING_MILEAGE = 0.0
 M_STARTING_TIME = 8
 M_INITIAL_LOAD = None
+
+
+def m_load_csv_file(filename: str) -> List[List[str]]:
+    """
+    Loads a CSV file into a lists of lists
+
+    :arg
+        filename: The path to the CSV file
+
+    :returns
+        A lists of lists where each inner list represents a row from the CSV file.
+
+    :raises
+        FileNotFound: When a file is not found
+        csv.Error parsing the CSV file sent
+        :exception
+    """
+    try:
+        with open(filename, 'r') as file:
+            return list(csv.reader(file))
+    except FileNotFoundError:
+        logging.error(f'File not found {filename}')
+        raise
+    except csv.Error as e:
+        logging.error(f'CSV error in file {filename}: {e}')
+        raise
+    except Exception as e:
+        logging.error(f'Unexpected error when reading {filename}: {e}')
 
 
 def m_load_package_data(filename, hash_table):
@@ -67,7 +95,7 @@ def m_update_truck_status(truck: Truck, package: Package, distance: float):
     truck.m_packages.append(package.m_ID)
     truck.m_mileage += distance
     truck.m_address = package.m_address
-    truck.m_time += datetime.timedelta(hours= distance / truck.m_speed)
+    truck.m_time += datetime.timedelta(hours=distance / truck.m_speed)
     package.m_delivery_time = truck.m_time
     package.m_departure_time = truck.m_departure_time
 
@@ -92,8 +120,6 @@ def m_deliver_packages(truck: Truck):
         nearest_package, distance = m_find_nearest_package(truck, m_pending_packages)
         m_update_truck_status(truck, nearest_package, distance)
         m_pending_packages.remove(nearest_package)
-
-
 
 
 def m_get_user_time():
@@ -155,20 +181,11 @@ def main():
             exit()
 
 
-# Read package information
-with open("CSV/Package_File.csv") as package_file:
-    m_package_file = csv.reader(package_file)
-    m_package_file = list(m_package_file)
+logging.basicConfig(filename='app.log', level=logging.DEBUG)  # configure for error tracking
 
-# Read distance file
-with open("CSV/Distance_File.csv") as distance_file:
-    m_distance_file = csv.reader(distance_file)
-    m_distance_file = list(m_distance_file)
-
-# Read address file
-with open("CSV/Address_File.csv") as address_file:
-    m_address_file = csv.reader(address_file)
-    m_address_file = list(m_address_file)
+m_package_file = m_load_csv_file('CSV/Package_File.csv')  # Load package file information
+m_distance_file = m_load_csv_file('CSV/Distance_File.csv')  # Load distance information
+m_address_file = m_load_csv_file('CSV/Address_File.csv')  # Load address information
 
 
 m_truck1 = Truck.Truck(M_TRUCK_CAPACITY,
