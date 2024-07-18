@@ -1,4 +1,10 @@
 # config.py
+"""
+Configuration files and constants for the delivery service application.
+
+This file defines various constants and configurations including truck capacity, speed, hub address, etc. All the
+variables are evident what they refer to.
+"""
 
 import datetime
 
