@@ -86,11 +86,24 @@ def m_load_package_data(filename: str, hash_table: HashTable) -> None:
 
 
 def m_extract_address(address):
-    """A helper method to obtain the label of the vertex to then reference in the adjacent matrix to determine
-    the weighted edge to then be used in the nearest neighbor algorithm"""
-    for row in m_address_file:
-        if address in row[2]:
-            return int(row[0])
+    """
+    Provided the address, this will extract the label (vertex ID).
+
+    Assuming the 'm_address_file' holds the address data, this method will search for the row where the 'address'
+    field matches the provided 'address' argument. If a match is found, this will return the corresponding
+    vertex ID.
+
+    """
+
+    if not isinstance(m_address_file, list):
+        raise ValueError('Address data (m_address_file) must be a list of lists.')
+    try:
+        for row in m_address_file:
+            if address in row[2]:
+                return int(row[0])
+        raise ValueError(f'Address {address} not found in address data.')
+    except (TypeError, ValueError) as e:
+        logging.error(f"Error extracting address label for '{address}': {e}")
 
 
 def m_distance_between(x_value, y_value):
