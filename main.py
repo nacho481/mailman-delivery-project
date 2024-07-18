@@ -238,18 +238,35 @@ def m_find_nearest_package(truck: Truck, pending_packages: List[Package]) -> Tup
         raise
 
 
-def m_deliver_packages(truck: Truck):
-    """This method will take a truck object and then sort the packages in the truck object to drop off the packages
-    in the most efficient way possible. This method uses a variation of the nearest neighbor algorithm to do so."""
+def m_deliver_packages(truck: Truck) -> None:
+    """Delivers all pending packages using the Nearest Neighbor Algorithm.
 
-    # load pending packages yet to be delivered
-    m_pending_packages = [m_package_hash_table.m_look_up(pID) for pID in truck.m_packages]
-    truck.m_packages.clear()  # We want to insert packages according to the most efficient path so clear it
+    This function uses an iterative approach to find the nearest undelivered package with respect to the truck's
+    current location. In addition, it will update the truck's status such as its mileage, address, delivery and
+     departure times, along with the package's deliver information. Then the packages are delivered optimizing the
+     truck's delivery route.
 
-    while m_pending_packages:
-        nearest_package, distance = m_find_nearest_package(truck, m_pending_packages)
-        m_update_truck_status(truck, nearest_package, distance)
-        m_pending_packages.remove(nearest_package)
+     :arg
+        truck (Truck): The truck object with packages to be delivered
+
+    :raises
+        ValueError: If there are no pending packages in the truck. """
+
+    try:
+        # load pending packages yet to be delivered
+        logging.info(f'Starting delivery for the truck')
+        m_pending_packages = [m_package_hash_table.m_look_up(pID) for pID in truck.m_packages]
+        truck.m_packages.clear()  # We want to insert packages according to the most efficient path so clear it
+
+        while m_pending_packages:
+            nearest_package, distance = m_find_nearest_package(truck, m_pending_packages)
+            m_update_truck_status(truck, nearest_package, distance)
+            m_pending_packages.remove(nearest_package)
+            logging.info(f'Delivered package {nearest_package.m_ID} to {nearest_package.m_address}')
+
+        logging.info(f'Successfully completed delivery for truck')
+    except ValueError as e:
+        logging.error(f'No pending packages found for the truck: {e}')
 
 
 def m_get_user_time():

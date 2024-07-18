@@ -1,3 +1,76 @@
 ERROR:root:Invalid distance provided: 0.0
 ERROR:root:Invalid distance provided: 0.0
 ERROR:root:Invalid distance provided: 0.0
+INFO:root:Starting delivery for the truck
+INFO:root:Delivered package 14 to 4300 S 1300 E
+INFO:root:Delivered package 15 to 4580 S 2300 E
+INFO:root:Delivered package 16 to 4580 S 2300 E
+INFO:root:Delivered package 34 to 4580 S 2300 E
+INFO:root:Delivered package 20 to 3595 Main St
+INFO:root:Delivered package 31 to 3365 S 900 W
+INFO:root:Delivered package 40 to 380 W 2880 S
+INFO:root:Delivered package 1 to 195 W Oakland Ave
+INFO:root:Delivered package 29 to 1330 2100 S
+INFO:root:Delivered package 37 to 410 S State St
+INFO:root:Delivered package 30 to 300 State St
+INFO:root:Delivered package 13 to 2010 W 500 S
+INFO:root:Starting delivery for the truck
+INFO:root:Delivered package 14 to 4300 S 1300 E
+INFO:root:Delivered package 15 to 4580 S 2300 E
+INFO:root:Delivered package 16 to 4580 S 2300 E
+INFO:root:Delivered package 34 to 4580 S 2300 E
+INFO:root:Delivered package 20 to 3595 Main St
+INFO:root:Delivered package 31 to 3365 S 900 W
+INFO:root:Delivered package 40 to 380 W 2880 S
+INFO:root:Delivered package 1 to 195 W Oakland Ave
+INFO:root:Delivered package 29 to 1330 2100 S
+INFO:root:Delivered package 37 to 410 S State St
+INFO:root:Delivered package 30 to 300 State St
+INFO:root:Delivered package 13 to 2010 W 500 S
+INFO:root:Starting delivery for the truck
+INFO:root:Delivered package 14 to 4300 S 1300 E
+INFO:root:Delivered package 15 to 4580 S 2300 E
+INFO:root:Delivered package 16 to 4580 S 2300 E
+INFO:root:Delivered package 34 to 4580 S 2300 E
+INFO:root:Delivered package 20 to 3595 Main St
+INFO:root:Delivered package 31 to 3365 S 900 W
+INFO:root:Delivered package 40 to 380 W 2880 S
+INFO:root:Delivered package 1 to 195 W Oakland Ave
+INFO:root:Delivered package 29 to 1330 2100 S
+INFO:root:Delivered package 37 to 410 S State St
+INFO:root:Delivered package 30 to 300 State St
+INFO:root:Delivered package 13 to 2010 W 500 S
+INFO:root:Successfully completed delivery for truck
+INFO:root:Starting delivery for the truck
+INFO:root:Delivered package 21 to 3595 Main St
+INFO:root:Delivered package 19 to 177 W Price Ave
+INFO:root:Delivered package 12 to 3575 W Valley Central Station bus Loop
+INFO:root:Delivered package 36 to 2300 Parkway Blvd
+INFO:root:Delivered package 6 to 3060 Lester St
+INFO:root:Delivered package 17 to 3148 S 1100 W
+INFO:root:Delivered package 18 to 1488 4800 S
+INFO:root:Delivered package 23 to 5100 South 2700 West
+INFO:root:Delivered package 24 to 5025 State St
+INFO:root:Delivered package 26 to 5383 South 900 East #104
+INFO:root:Delivered package 22 to 6351 South 900 East
+INFO:root:Delivered package 27 to 1060 Dalton Ave S
+INFO:root:Delivered package 35 to 1060 Dalton Ave S
+INFO:root:Delivered package 39 to 2010 W 500 S
+INFO:root:Delivered package 38 to 410 S State St
+INFO:root:Delivered package 3 to 233 Canyon Rd
+INFO:root:Successfully completed delivery for truck
+INFO:root:Starting delivery for the truck
+INFO:root:Delivered package 25 to 5383 South 900 East #104
+INFO:root:Delivered package 2 to 2530 S 500 E
+INFO:root:Delivered package 33 to 2530 S 500 E
+INFO:root:Delivered package 28 to 2835 Main St
+INFO:root:Delivered package 4 to 380 W 2880 S
+INFO:root:Delivered package 32 to 3365 S 900 W
+INFO:root:Delivered package 6 to 3060 Lester St
+INFO:root:Delivered package 11 to 2600 Taylorsville Blvd
+INFO:root:Delivered package 7 to 1330 2100 S
+INFO:root:Delivered package 10 to 600 E 900 South
+INFO:root:Delivered package 5 to 410 S State St
+INFO:root:Delivered package 8 to 300 State St
+INFO:root:Delivered package 9 to 300 State St
+INFO:root:Successfully completed delivery for truck
