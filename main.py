@@ -94,28 +94,6 @@ def m_deliver_packages(truck: Truck):
         m_pending_packages.remove(nearest_package)
 
 
-    # # Determine what packages need to be dropped off so long as the list is not empty in pending packages
-    # while len(m_pending_packages) > 0:
-    #     next_address = float('inf')  # starting address
-    #     next_package: Package = None  # available package object used for later
-    #     for package in m_pending_packages:  # go through pending package list
-    #         # calculating Euclidean distance is not necessary for this nearest neighbor algorithm since
-    #         # the distance_file provides information to make an adjacency matrix
-    #         # If (distance = truck.m_address + package.m_address) <= next_address, then execute the code
-    #         if m_distance_between(m_extract_address(truck.m_address),
-    #                               m_extract_address(package.m_address)) < next_address:
-    #             # closer neighbor so reassign next address
-    #             next_address = m_distance_between(m_extract_address(truck.m_address),
-    #                                               m_extract_address(package.m_address))
-    #             next_package = package  # reassign next to equal loop variable
-    #
-    #     truck.m_packages.append(next_package.m_ID)  # add the closest package
-    #     m_pending_packages.remove(next_package)  # remove from pending package since it's in the truck now
-    #     truck.m_mileage += next_address  # increment mileage accrued
-    #     truck.m_address = next_package.m_address  # update truck's current location, and preps for next iteration
-    #     truck.m_time += datetime.timedelta(hours=next_address / 18)  # divide the distance by speed traveled
-    #     next_package.m_delivery_time = truck.m_time  # update delivery time
-    #     next_package.m_departure_time = truck.m_departure_time  # update departure time
 
 
 def m_get_user_time():
