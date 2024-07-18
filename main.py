@@ -113,13 +113,41 @@ def m_extract_address(address: str) -> int:
         logging.error(f"Error extracting address label for '{address}': {e}")
 
 
-def m_distance_between(x_value, y_value):
-    """References weighted matrix providing indices for the row and column of the element returning it as a float
-    point value."""
-    if m_distance_file[x_value][y_value] == '':
-        return float(m_distance_file[y_value][x_value])
-    else:
-        return float(m_distance_file[x_value][y_value])
+def m_distance_between(x_value: int, y_value: int) -> float:
+    """
+    Returns the distance between two locations given their indices in the adjacent matrix.
+
+    This function assumes that the adjacent matrix with weighted edges is stored in the 'm_distance_file' variable.
+    Then, it'll look up the x and y value, or the row and column value respectively within the matrix. However, if
+    that value is empty, it'll check the mirrored position, (col, row) or (y_value, x_value) respectively, to retrieve
+    the distance.
+
+    :arg
+        x_value (int): Row index in adjacent matrix
+        y_value (int): Column index in adjacent matrix
+
+    :returns
+        float: Returns the distance between the two locations OR raises an exception if not found.
+
+
+    """
+    try:
+        # check for out of bounds
+        if x_value < 0 or x_value >= len(m_distance_file):
+            raise IndexError(f'x_value ({x_value}) is out bounds for the distance matrix.')
+        if y_value < 0 or y_value >= len(m_distance_file):
+            raise IndexError(f'y_value ({y_value}) is out of bounds for the distance matrix')
+
+        # Access distance value and convert to float
+        distance = m_distance_file[x_value][y_value]
+        if distance == '':
+            distance = m_distance_file[y_value][x_value]
+            if distance == '':
+                raise ValueError('Distance is not found between locations')
+        return float(distance)
+    except (IndexError, ValueError) as e:
+        logging.error(f'Error getting distance between {x_value} and {y_value}: {e}')
+        raise
 
 
 def m_calculate_distance(address1: str, address2: str) -> float:
