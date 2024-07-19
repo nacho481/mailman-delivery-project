@@ -5,7 +5,30 @@ from typing import List
 
 
 class DataManager:
+    """Manages data related to the package. It uses a lot of helper methods.
+
+    This class provides methods for loading CSV data, extracting an address which returns a vertex's label or
+    ID, a helper method to calculate the distance, then the actual method to calculate the distance.
+
+    Attributes
+        m_package_file (List[List[str]]): A list of list containing package data loaded from the corresponding CSV file
+        m_distance_file (List[List[str]]): A list of list containing the adjacent matrix for distance calculations
+        m_address_file (List[List[str]]): A list of list containing address data used to extract the vertex's label or
+            ID
+    """
     def __init__(self, package_file: str, distance_file: str, address_file: str):
+        """Initializes a DataManager object.
+
+        This constructor loads data from three CSV files.
+
+        :arg
+            m_package_file (List[List[str]]): A list of list containing package data loaded from the corresponding
+                CSV file 'Package_File.csv'
+            m_distance_file (List[List[str]]): A list of list containing the adjacent matrix for distance calculations
+                for the corresponding CSV file 'Distance_File.csv'
+            m_address_file (List[List[str]]): A list of list containing address data used to extract the vertex's label
+                or ID from the corresponding 'Address_File.csv'
+        """
         self.m_package_file = self.m_load_csv_file(package_file)
         self.m_distance_file = self.m_load_csv_file(distance_file)
         self.m_address_file = self.m_load_csv_file(address_file)
