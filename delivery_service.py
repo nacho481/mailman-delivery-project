@@ -1,16 +1,17 @@
 # delivery_service.py
 
-import logging
 import datetime
-from typing import List
-from Truck import Truck
-from Package import Package
+import logging
+from typing import List, Tuple
+
 from HashTable import HashTable
+from Package import Package
+from Truck import Truck
 from utils import DataManager
 
 
 class DeliveryService:
-    def __init__(self, trucks: List[Truck], package_hash_table: HashTable, data_manager: DataManager):
+    def __init__(self, trucks: List[Truck], package_hash_table: HashTable, data_manager: DataManager) -> None:
         """
         Initializes the DeliveryService object.
 
@@ -30,7 +31,8 @@ class DeliveryService:
         self.m_package_hash_table = package_hash_table
         self.m_data_manager = data_manager
 
-    def m_deliver_packages(self):
+    def m_deliver_packages(self) -> None\
+            :
         """
         Delivers all pending packages using the Nearest Neighbor Algorithm for each truck.
         This function iterates through the list of trucks calling the "_deliver_packages_for_truck() method' for each
@@ -55,7 +57,7 @@ class DeliveryService:
 
         logging.info(f'Completed delivery for all trucks')
 
-    def _deliver_packages_for_truck(self, truck: Truck):
+    def _deliver_packages_for_truck(self, truck: Truck) -> None:
         """Delivers all pending packages using the Nearest Neighbor Algorithm.
 
         This function uses an iterative approach to find the nearest undelivered package with respect to the truck's
@@ -97,7 +99,7 @@ class DeliveryService:
         except ValueError as e:
             logging.error(f'No pending packages found for the truck: {e}')
 
-    def _find_nearest_package(self, truck: Truck, pending_packages: List[Package]):
+    def _find_nearest_package(self, truck: Truck, pending_packages: List[Package]) -> Tuple[Package, float]:
         """Find the nearest package in the list of packages relative to the truck's location.
 
             The function uses the m_calculate_distance() method used to find the distance between the truck's current
@@ -129,7 +131,7 @@ class DeliveryService:
             logging.error(f'Error finding nearest package for truck: {e}')
             raise
 
-    def _update_truck_status(self, truck: Truck, package: Package, distance: float):
+    def _update_truck_status(self, truck: Truck, package: Package, distance: float) -> None:
         """Update the truck's status after delivering a package by updating the package's attributes in the truck and the
             truck itself. This function updates the truck's package list, total mileage, current address, travel time by
             dividing distance by its speed, and updates the package's delivery and departure time.
@@ -154,7 +156,7 @@ class DeliveryService:
             logging.error(f'Error updating truck status: {e}')
             raise
 
-    def m_get_total_mileage(self):
+    def m_get_total_mileage(self) -> float:
         """Calculates the total mileage driven by all trucks.
 
         This function will iterate through the list of trucks incrementing their mileage attributes summing it.
