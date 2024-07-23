@@ -118,8 +118,6 @@ def main():
     # title
     print("Western Governors University Parcel Service")  # Show delivery service name
     # total miles for all the trucks
-    # print(f"Total miles: {m_truck1.m_mileage + m_truck2.m_mileage + m_truck3.m_mileage} miles")
-    # print(f'Total miles: {trucks[0].m_mileage + trucks[1].m_mileage + trucks[2].m_mileage}')
     print(f'Total miles: {delivery_service.m_get_total_mileage():.2f} miles')
 
     while True:
@@ -129,22 +127,22 @@ def main():
                 convert_timedelta = m_get_user_time()  # Get time from user
                 selection = m_get_package_selection()  # See what option they want displayed
 
-                if selection == 1:
+                if selection == 1:  # This output selects option 1, returning 1 package
                     try:
-                        one_input = input("Enter package ID: ")
-                        package = package_hash_table.m_look_up(int(one_input))
-                        print(str(package))
-                        break
+                        one_input = input("Enter package ID: ")  # Get id
+                        package = package_hash_table.m_look_up(int(one_input))  # lookup ID
+                        print(str(package))  # print the package info in string format
+                        break  # break from the loop
                     except ValueError:
-                        print('Invalid package ID. Closing program.')
-                        exit()
-                elif selection == 2:
-                    for x in range(1, 41):
-                        package = package_hash_table.m_look_up(x)
-                        package.m_update_status(convert_timedelta)
-                        print(str(package))
+                        print('Invalid package ID. Closing program.')  # prompt user invalid datatype was entered
+                        exit()  # exit the program
+                elif selection == 2:  # This option selects all packages to be displayed.
+                    for x in range(1, 41):  # all packages
+                        package = package_hash_table.m_look_up(x)  # look up packages
+                        package.m_update_status(convert_timedelta)  # update status for each package to be printed
+                        print(str(package))  # print package information
                     break
-                else:
+                else:  # if it's not 1 or 2, exit
                     exit()
             except ValueError as e:
                 print(f'Invalid entry: {e}. Closing program...')
