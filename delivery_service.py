@@ -31,8 +31,15 @@ class DeliveryService:
         self.m_package_hash_table = package_hash_table
         self.m_data_manager = data_manager
 
-    def m_deliver_packages(self) -> None\
-            :
+    def update_package_9_address(self, current_time: datetime.timedelta) -> None:
+        package_9: Package = self.m_package_hash_table.m_look_up(9)
+        package_9.m_address = "410 S State St"
+        package_9.m_city = "Salt Lake City"
+        package_9.m_status = "UT"
+        package_9.m_zip = "84111"
+        logging.info(f'Updated address at package #9 at {current_time}')
+
+    def m_deliver_packages(self) -> None:
         """
         Delivers all pending packages using the Nearest Neighbor Algorithm for each truck.
         This function iterates through the list of trucks calling the "_deliver_packages_for_truck() method' for each
@@ -47,6 +54,8 @@ class DeliveryService:
         if not self.m_trucks:
             logging.error('No trucks found for delivery. Please ensure trucks are available.')
             raise IndexError('No trucks available for delivery')
+
+        self.update_package_9_address(datetime.timedelta(hours=2, minutes=20))
 
         self._deliver_packages_for_truck(self.m_trucks[0])
         self._deliver_packages_for_truck(self.m_trucks[1])
