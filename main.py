@@ -131,16 +131,17 @@ def main():
                     try:
                         one_input = input("Enter package ID: ")  # Get id
                         package = package_hash_table.m_look_up(int(one_input))  # lookup ID
-                        print(str(package))  # print the package info in string format
+                        package.m_update_status(convert_timedelta)
+                        print(package.m_get_status_string(convert_timedelta))  # print the package info in string format
                         break  # break from the loop
                     except ValueError:
                         print('Invalid package ID. Closing program.')  # prompt user invalid datatype was entered
                         exit()  # exit the program
                 elif selection == 2:  # This option selects all packages to be displayed.
                     for x in range(1, 41):  # all packages
-                        package = package_hash_table.m_look_up(x)  # look up packages
+                        package: Package = package_hash_table.m_look_up(x)  # look up packages
                         package.m_update_status(convert_timedelta)  # update status for each package to be printed
-                        print(str(package))  # print package information
+                        print(package.m_get_status_string(convert_timedelta))  # print package information
                     break
                 else:  # if it's not 1 or 2, exit
                     exit()
