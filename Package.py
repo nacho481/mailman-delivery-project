@@ -83,9 +83,52 @@ class Package:
                 departure_time = self.m_original_departure_time
 
         truck_info = f'on Truck #{self.m_truck}' if self.m_truck else 'not assigned'
-        return (f"{self.m_ID}, {address}, {city}, {state}, {intermediate_zip}, "
-                f"{self.m_deadline}, {self.m_weight}, Delivery time: {delivery_time}, "
-                f"Departure time: {departure_time}, {self.m_status}, {truck_info}")
+
+        # Adjust departure and delivery time display based on status
+        delivery_time_str = ''
+        departure_time_str = ''
+        if self.m_status == 'En route':
+            delivery_time_str = 'None'
+            departure_time_str = str(departure_time)
+        elif self.m_status == 'At hub':
+            delivery_time_str = 'None'
+            departure_time_str = 'None'
+        elif self.m_status == 'Delivered':
+            delivery_time_str = str(delivery_time)
+            departure_time_str = str(departure_time)
+        else:
+            delivery_time_str = 'None'
+            departure_time_str = 'None'
+
+        # Define field widths
+        id_width = 3
+        address_width = 38
+        city_width = 16
+        state_width = 2
+        zip_width = 5
+        deadline_width = 8
+        weight_width = 8
+        delivery_time_width = 18
+        departure_time_width = 18
+        status_width = 9
+        truck_width = 13
+        # Format the string with fixed widths and left justification
+        return (f"{self.m_ID:<{id_width}} "
+                f"{address:<{address_width}} "
+                f"{city:<{city_width}} "
+                f"{state:<{state_width}} "
+                f"{intermediate_zip:<{zip_width}} "
+                f"{self.m_deadline:<{deadline_width}} "
+                f"{self.m_weight:<{weight_width}} "
+                f"Delivery time: {delivery_time_str:<{delivery_time_width}} "
+                f"Departure time: {departure_time_str:<{departure_time_width}} "
+                f"{self.m_status:<{status_width}} "
+                f"{truck_info:<{truck_width}}")
+
+
+        # return (f"{self.m_ID}, {address}, {city}, {state}, {intermediate_zip}, "
+        #         f"{self.m_deadline}, {self.m_weight}, Delivery time: {delivery_time_str}, "
+        #         f"Departure time: {departure_time_str}, {self.m_status}, {truck_info}")
 
     def m_update_status(self, time):
         """
