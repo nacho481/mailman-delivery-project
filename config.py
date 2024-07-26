@@ -30,7 +30,8 @@ M_TRUCK_CONFIGS = [
         "mileage": M_STARTING_MILEAGE,
         "address": M_HUB_ADDRESS,
         "depart_time": datetime.timedelta(hours=M_STARTING_TIME),
-        "load": M_INITIAL_LOAD
+        "load": M_INITIAL_LOAD,
+        "truck_number": 1
     },
     {
         "capacity": M_TRUCK_CAPACITY,
@@ -39,7 +40,8 @@ M_TRUCK_CONFIGS = [
         "mileage": M_STARTING_MILEAGE,
         "address": M_HUB_ADDRESS,
         "depart_time": datetime.timedelta(hours=M_STARTING_TIME),
-        "load": M_INITIAL_LOAD
+        "load": M_INITIAL_LOAD,
+        "truck_number": 2
     },
     {
         "capacity": M_TRUCK_CAPACITY,
@@ -48,6 +50,7 @@ M_TRUCK_CONFIGS = [
         "mileage": M_STARTING_MILEAGE,
         "address": M_HUB_ADDRESS,
         "depart_time": datetime.timedelta(hours=M_STARTING_TIME),
-        "load": M_INITIAL_LOAD
+        "load": M_INITIAL_LOAD,
+        "truck_number": 3
     }
 ]
