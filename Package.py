@@ -63,9 +63,6 @@ class Package:
         :returns
             str: A formatted string containing package information."""
         return self.m_get_status_string(None)
-        # return (f"{self.m_ID}, {self.m_address}, {self.m_city}, {self.m_state}, {self.m_zip}, {self.m_deadline}, "
-        #         f"{self.m_weight}, Delivery time: {self.m_delivery_time}, Departure time: {self.m_departure_time}, "
-        #         f"{self.m_status}")
 
     def m_get_status_string(self, current_time: datetime.timedelta):
         address = self.m_address
@@ -126,9 +123,6 @@ class Package:
                 f"Departure time: {departure_time_str:<{departure_time_width}} "
                 f"{self.m_status:<{status_width}} "
                 f"{truck_info:<{truck_width}}")
-        # return (f"{self.m_ID}, {address}, {city}, {state}, {intermediate_zip}, "
-        #         f"{self.m_deadline}, {self.m_weight}, Delivery time: {delivery_time_str}, "
-        #         f"Departure time: {departure_time_str}, {self.m_status}, {truck_info}")
 
     def m_update_status(self, time):
         """
