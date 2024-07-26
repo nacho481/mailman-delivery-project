@@ -135,11 +135,12 @@ def main():
         text = input("To start please type 's' for start: ")
         if text == 's':
             try:
-                convert_timedelta = m_get_user_time()  # Get time from user
+                # convert_timedelta = m_get_user_time()  # Get time from user
                 selection = m_get_package_selection()  # See what option they want displayed
 
                 if selection == 1:  # This output selects option 1, returning 1 package
                     try:
+                        convert_timedelta = m_get_user_time()
                         one_input = input("Enter package ID: ")  # Get id
                         package = package_hash_table.m_look_up(int(one_input))  # lookup ID
                         package.m_update_status(convert_timedelta)
@@ -149,6 +150,7 @@ def main():
                         print('Invalid package ID. Closing program.')  # prompt user invalid datatype was entered
                         exit()  # exit the program
                 elif selection == 2:  # This option selects all packages to be displayed.
+                    convert_timedelta = m_get_user_time()
                     for x in range(1, 41):  # all packages
                         package: Package = package_hash_table.m_look_up(x)  # look up packages
                         package.m_update_status(convert_timedelta)  # update status for each package to be printed
