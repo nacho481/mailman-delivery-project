@@ -1,3 +1,4 @@
+# Truck.py
 class Truck:
     """
     Holds information for the truck class representing attributes and methods to maintain the truck object.
@@ -13,7 +14,7 @@ class Truck:
         m_load (object): Keeps track if the truck is loaded or not, will be utilized in future iteration.
 
     """
-    def __init__(self, capacity, speed, packages, mileage, address, depart_time, load):
+    def __init__(self, capacity, speed, packages, mileage, address, depart_time, load, truck_number):
         """
         Initializes the Truck class for you
 
@@ -35,6 +36,7 @@ class Truck:
         self.m_departure_time = depart_time
         self.m_time = depart_time
         self.m_load = load
+        self.m_truck_number = truck_number
 
     def __str__(self):
         """Returns a string representation of the truck object.
