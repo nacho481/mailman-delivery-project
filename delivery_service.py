@@ -136,17 +136,22 @@ class DeliveryService:
         try:
             # load pending packages yet to be delivered
             logging.info(f'Starting delivery for the truck')
-            m_pending_packages = [self.m_package_hash_table.m_look_up(pID) for pID in truck.m_packages]
+            m_pending_packages: List[Package] = [self.m_package_hash_table.m_look_up(pID) for pID in truck.m_packages]
             # Assign truck number in list
             for pID in m_pending_packages:
                 pID.m_truck = truck.m_truck_number
             truck.m_packages.clear()  # We want to insert packages according to the most efficient path so clear it
 
+            last_delivery_time = truck.m_departure_time
+
             while m_pending_packages:
                 self.update_package_9_address(truck.m_time)
                 nearest_package, distance = self._find_nearest_package(truck, m_pending_packages)
+                nearest_package.m_departure_time = last_delivery_time
                 self._update_truck_status(truck, nearest_package, distance)
+                last_delivery_time = nearest_package.m_delivery_time
                 m_pending_packages.remove(nearest_package)
+
                 logging.info(f'Delivered package {nearest_package.m_ID} to {nearest_package.m_address}')
 
             logging.info(f'Successfully completed delivery for truck')
@@ -206,13 +211,12 @@ class DeliveryService:
             truck.m_time += datetime.timedelta(hours=distance / truck.m_speed)
 
             # Set the original times if they haven't been set
-            if package.m_original_delivery_time is None:
+            if package.m_original_delivery_time is None and package.m_ID == 9:
                 package.m_original_delivery_time = truck.m_time
-            if package.m_original_departure_time is None:
+            if package.m_original_departure_time is None and package.m_ID == 9:
                 package.m_original_departure_time = truck.m_departure_time
 
             package.m_delivery_time = truck.m_time
-            package.m_departure_time = truck.m_departure_time
         except (AttributeError, IndexError) as e:
             logging.error(f'Error updating truck status: {e}')
             raise
