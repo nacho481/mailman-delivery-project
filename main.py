@@ -87,15 +87,26 @@ def m_get_package_selection():
         ValueError: If the user enters an invalid input that cannot be converted to an integer."""
     # Ensures we get right data type from user
     while True:
-        selection = input("Enter (1 for 1 package) or (2 for all packages): ")
+        selection = input("Enter (1 for 1 package), (2 for all packages), or "
+                          "(3 for completion status of all packages): ")
         try:
-            if selection in ("1", "2"):  # We want either 1 or 2
+            if selection in ("1", "2", "3"):  # We want either 1 or 2
                 return int(selection)
             else:
                 # Reprompt the user to enter a correct value
-                raise ValueError("Invalid selection. Please enter 1 or 2.")
+                raise ValueError("Invalid selection. Please enter 1, 2, or 3.")
         except ValueError as e:
-            print(f'Invalid input: {e}. Please enter 1 or 2.')  # More informative error message
+            print(f'Invalid input: {e}. Please enter 1, 2, or 3.')  # More informative error message
+
+
+def m_display_all_package_status(package_hash_table: HashTable, completion_time: datetime.timedelta):
+    for package_id in range(1, 41):
+        package: Package = package_hash_table.m_look_up(package_id)
+        if package:
+            package.m_update_status(completion_time)
+            print(package.m_get_status_string(completion_time))
+        else:
+            print(f'Package {package_id}: Not Found')
 
 
 def main():
@@ -143,6 +154,11 @@ def main():
                         package.m_update_status(convert_timedelta)  # update status for each package to be printed
                         print(package.m_get_status_string(convert_timedelta))  # print package information
                     break
+                elif selection == 3:  # This option displays the completion status of all packages
+                    # get completion time when all packages are delivered
+                    completion_time = delivery_service.m_get_completion_time()
+                    m_display_all_package_status(package_hash_table, completion_time)  # display status for completion
+                    break  # break
                 else:  # if it's not 1 or 2, exit
                     exit()
             except ValueError as e:
