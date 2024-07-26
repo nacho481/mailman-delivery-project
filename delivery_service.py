@@ -33,18 +33,28 @@ class DeliveryService:
         self.m_data_manager = data_manager
 
     def update_package_9_address(self, current_time: datetime.timedelta) -> None:
+        """Updates the address of package 9 if the current time is after the update time.
+
+        This method checks if the current time has reached or passed the time when package 9's
+        address should be updated. If so, it updates the package's address, city, state, and zip code.
+        It also resets the package status to "At Hub" for redelivery.
+
+        :arg
+            current_time (datetime.timedelta): The current time in the simulation
+        """
         package_9: Package = self.m_package_hash_table.m_look_up(9)
         package_9.update_address("410 S State St", "Salt Lake City", "UT", "84111", current_time)
         package_9.m_status = "At Hub"  # Reset status for redelivery
-
-        # if current_time >= datetime.timedelta(hours=10, minutes=20):
-        #     package_9.m_address = "410 S State St"
-        #     package_9.m_city = "Salt Lake City"
-        #     package_9.m_status = "UT"
-        #     package_9.m_zip = "84111"
         logging.info(f'Updated address at package #9 at {current_time}')
 
     def _handle_package_9_update(self):
+        """
+        Handles the update and redelivery process for package 9.
+
+        This private method manages the special case of package 9, which requires an address update
+        and redelivery. It updates the package's address at a specific time, adjusts the truck's time
+        if necessary, and initiates the redelivery process.
+        """
         package_9: Package = self.m_package_hash_table.m_look_up(9)
         update_time = datetime.timedelta(hours=10, minutes=20)
 
@@ -55,7 +65,14 @@ class DeliveryService:
         self._redeliver_package_9()
 
     def _redeliver_package_9(self):
-        package_9: Package = self.m_package_hash_table.m_look_up(9)
+        """
+        Manages the redelivery process for package 9 after its address update.
+
+        This method simulates the process of the truck returning to the hub, picking up package 9 from the incorrect
+        address, then drops it off to the updated address. It updates the truck's (status, time, mileage, current
+        address) and the package's information (departure time, delivery time, and status) respectively.
+        """
+        package_9: Package = self.m_package_hash_table.m_look_up(9)  # look up hashitem
         truck = self.m_trucks[2]  # reuse truck 3
 
         # Calculate time to return to hub
@@ -231,5 +248,8 @@ class DeliveryService:
         return sum(truck.m_mileage for truck in self.m_trucks)
 
     def m_get_completion_time(self):
-        """Returns the max time from m_get_completion_time"""
+        """Returns latest deliver indicating the completion time and all deliveries have been made.
+
+        :return: The time when all deliveries are completed.
+        :rtype: datetime.timedelta"""
         return max(truck.m_time for truck in self.m_trucks)
