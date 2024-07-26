@@ -100,6 +100,24 @@ def m_get_package_selection():
 
 
 def m_display_all_package_status(package_hash_table: HashTable, completion_time: datetime.timedelta):
+    """
+    Displays the status of all packages at the completion time of deliveries.
+
+    This function iterates through all package IDs (1 to 40), retrieves each package
+    from the hash table, updates its status based on the completion time, and prints
+    the status information for each package.
+
+    :arg
+        package_hash_table (HashTable): The hash table containing all the package objects.
+        completion_time (datetime.timedelta): The time when all the deliveries are completed
+
+    :raises
+        TypeError: If package_hash_table is not a HashTable instance.
+        ValueError: If completion_time is negative.
+
+    Note: This function will assume that package's IDs range from 1 to 40. If a package
+    is not found in the hash table, then it will print a "Not Found" message for that ID.
+    """
     for package_id in range(1, 41):
         package: Package = package_hash_table.m_look_up(package_id)
         if package:
@@ -126,10 +144,8 @@ def main():
     delivery_service = DeliveryService(trucks, package_hash_table, data_manager)  # Initialize delivery service
     delivery_service.m_deliver_packages()  # Deliver packages
 
-    # title
-    print("Western Governors University Parcel Service")  # Show delivery service name
-    # total miles for all the trucks
-    print(f'Total miles: {delivery_service.m_get_total_mileage():.2f} miles')
+    print("Western Governors University Parcel Service")  # Show delivery service name, title
+    print(f'Total miles: {delivery_service.m_get_total_mileage():.2f} miles') # total miles for all the trucks
 
     while True:
         text = input("To start please type 's' for start: ")
