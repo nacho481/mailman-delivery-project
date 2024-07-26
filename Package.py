@@ -2,6 +2,7 @@
 import logging
 import datetime
 
+
 class Package:
     """
         Represents a package with its details and delivery status.
@@ -18,6 +19,7 @@ class Package:
             m_departure_time (datetime.datetime): The time the package departed from the hub. (Optional)
             m_delivery_time (datetime.datetime): The time the package was delivered. (Optional)
         """
+
     def __init__(self, ID, address, city, state, zip, deadline, weight, status):
         """
         Initializes a Package object.
@@ -140,9 +142,9 @@ class Package:
                 return  # exit function
 
         delivery_time = self.m_original_delivery_time if (
-                    self.m_address_update_time and time < self.m_address_update_time) else self.m_delivery_time
+                self.m_address_update_time and time < self.m_address_update_time) else self.m_delivery_time
         departure_time = self.m_original_departure_time if (
-                    self.m_address_update_time and time < self.m_address_update_time) else self.m_departure_time
+                self.m_address_update_time and time < self.m_address_update_time) else self.m_departure_time
 
         if delivery_time and time >= delivery_time:
             self.m_status = "Delivered"
