@@ -8,6 +8,7 @@ from HashTable import HashTable
 from Package import Package
 from Truck import Truck
 from utils import DataManager
+from config import M_HUB_ADDRESS
 
 
 class DeliveryService:
@@ -33,11 +34,52 @@ class DeliveryService:
 
     def update_package_9_address(self, current_time: datetime.timedelta) -> None:
         package_9: Package = self.m_package_hash_table.m_look_up(9)
-        package_9.m_address = "410 S State St"
-        package_9.m_city = "Salt Lake City"
-        package_9.m_status = "UT"
-        package_9.m_zip = "84111"
+        package_9.update_address("410 S State St", "Salt Lake City", "UT", "84111", current_time)
+        package_9.m_status = "At Hub"  # Reset status for redelivery
+
+        # if current_time >= datetime.timedelta(hours=10, minutes=20):
+        #     package_9.m_address = "410 S State St"
+        #     package_9.m_city = "Salt Lake City"
+        #     package_9.m_status = "UT"
+        #     package_9.m_zip = "84111"
         logging.info(f'Updated address at package #9 at {current_time}')
+
+    def _handle_package_9_update(self):
+        package_9: Package = self.m_package_hash_table.m_look_up(9)
+        update_time = datetime.timedelta(hours=10, minutes=20)
+
+        if self.m_trucks[2].m_time < update_time:
+            self.m_trucks[2].m_time = update_time
+
+        self.update_package_9_address(update_time)
+        self._redeliver_package_9()
+
+    def _redeliver_package_9(self):
+        package_9: Package = self.m_package_hash_table.m_look_up(9)
+        truck = self.m_trucks[2]  # reuse truck 3
+
+        # Calculate time to return to hub
+        distance_to_hub = self.m_data_manager.m_calculate_distance(truck.m_address, M_HUB_ADDRESS)
+        time_to_hub = datetime.timedelta(hours=distance_to_hub / truck.m_speed)
+
+        # Update truck status
+        truck.m_time += time_to_hub
+        truck.m_mileage += distance_to_hub
+        truck.m_address = M_HUB_ADDRESS
+
+        # Redeliver package 9
+        distance_to_new_address = self.m_data_manager.m_calculate_distance(truck.m_address, package_9.m_address)
+        time_to_new_address = datetime.timedelta(hours=distance_to_new_address / truck.m_speed)
+
+        # Update truck and package status
+        truck.m_time += time_to_new_address
+        truck.m_mileage += distance_to_new_address
+        truck.m_address = package_9.m_address
+        package_9.m_departure_time = truck.m_time - time_to_new_address
+        package_9.m_delivery_time = truck.m_time
+        package_9.m_status = "Delivered"
+
+        logging.info(f'Redelivered package 9 to correct address at {truck.m_time}')
 
     def m_deliver_packages(self) -> None:
         """
@@ -55,14 +97,13 @@ class DeliveryService:
             logging.error('No trucks found for delivery. Please ensure trucks are available.')
             raise IndexError('No trucks available for delivery')
 
-        self.update_package_9_address(datetime.timedelta(hours=2, minutes=20))
-
         self._deliver_packages_for_truck(self.m_trucks[0])
         self._deliver_packages_for_truck(self.m_trucks[1])
 
         # Set the departure time for the 3rd truck
         self.m_trucks[2].m_departure_time = min(self.m_trucks[0].m_time, self.m_trucks[1].m_time)
         self._deliver_packages_for_truck(self.m_trucks[2])  # deliver packages for 3rd truck
+        self._handle_package_9_update()
 
         logging.info(f'Completed delivery for all trucks')
 
@@ -96,9 +137,13 @@ class DeliveryService:
             # load pending packages yet to be delivered
             logging.info(f'Starting delivery for the truck')
             m_pending_packages = [self.m_package_hash_table.m_look_up(pID) for pID in truck.m_packages]
+            # Assign truck number in list
+            for pID in m_pending_packages:
+                pID.m_truck = truck.m_truck_number
             truck.m_packages.clear()  # We want to insert packages according to the most efficient path so clear it
 
             while m_pending_packages:
+                self.update_package_9_address(truck.m_time)
                 nearest_package, distance = self._find_nearest_package(truck, m_pending_packages)
                 self._update_truck_status(truck, nearest_package, distance)
                 m_pending_packages.remove(nearest_package)
@@ -159,6 +204,13 @@ class DeliveryService:
             truck.m_mileage += distance
             truck.m_address = package.m_address
             truck.m_time += datetime.timedelta(hours=distance / truck.m_speed)
+
+            # Set the original times if they haven't been set
+            if package.m_original_delivery_time is None:
+                package.m_original_delivery_time = truck.m_time
+            if package.m_original_departure_time is None:
+                package.m_original_departure_time = truck.m_departure_time
+
             package.m_delivery_time = truck.m_time
             package.m_departure_time = truck.m_departure_time
         except (AttributeError, IndexError) as e:
