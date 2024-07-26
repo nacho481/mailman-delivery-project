@@ -65,6 +65,20 @@ class Package:
         return self.m_get_status_string(None)
 
     def m_get_status_string(self, current_time: datetime.timedelta):
+        """
+        Generate a formatted string representing the current status of the package.
+
+        This method creates a detailed string containing all relevant information about the package,
+        including its (ID, address, deadline, weight, delivery and departure times, and current status).
+        It handles special cases like address updates and adjusts the displayed information based on
+        the package's current status and the provided time.
+
+        :arg
+            current_time (datetime.timedelta): The current time in the delivery simulation, used to determine
+                what attributes should and shouldn't be shown.
+
+        :return: (str) A formatted string containing all relevant package information and status.
+        """
         address = self.m_address
         city = self.m_city
         state = self.m_state
@@ -154,6 +168,22 @@ class Package:
             logging.info(f'Package {self.m_ID} status updated to At hub .')
 
     def update_address(self, new_address, new_city, new_state, new_zip, update_time):
+        """
+            Update the status of the package based on the given time.
+
+            This method determines the current status of the package (At Hub, En Route, or Delivered)
+            based on the provided time and the package's departure and delivery times. It handles
+            special cases, such as the address update for package 9.
+
+            :arg
+                new_address (str): new address as a string
+                new_city (str): new city as a string
+                new_state (str): new state as a string
+                new_zip (str): new zip as a string
+                update_time (datetime.timedelta): the updated time to be assigned
+
+            :raises AttributeError: If required attributes are missing from the package object.
+            """
         self.m_address = new_address
         self.m_city = new_city
         self.m_state = new_state
