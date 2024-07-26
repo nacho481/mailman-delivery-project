@@ -6,7 +6,7 @@ class HashItem:
     """
     Represents a key-value pair within a hash table.
 
-    Attributes:
+    :arg
         key (object): Unique identifier for data
         value (object): Data associated with the key
 
