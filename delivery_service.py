@@ -225,3 +225,7 @@ class DeliveryService:
         :returns
             float: The total mileage driven by all trucks combined."""
         return sum(truck.m_mileage for truck in self.m_trucks)
+
+    def m_get_completion_time(self):
+        """Returns the max time from m_get_completion_time"""
+        return max(truck.m_time for truck in self.m_trucks)
