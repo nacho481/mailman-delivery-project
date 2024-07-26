@@ -98,8 +98,8 @@ class Package:
 
         if self.m_ID == 9 and self.m_address_update_time:
             if self.m_address_update_time <= time < self.m_departure_time:
-                self.m_status = 'En route to pickup from incorrect address'
-                return
+                self.m_status = 'En route'  # Say it's in route when it's on its way to pick up the package
+                return  # exit function
 
         delivery_time = self.m_original_delivery_time if (
                     self.m_address_update_time and time < self.m_address_update_time) else self.m_delivery_time
