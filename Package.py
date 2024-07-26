@@ -1,5 +1,6 @@
+# Package.py
 import logging
-
+import datetime
 
 class Package:
     """
@@ -44,14 +45,47 @@ class Package:
         self.m_departure_time = None
         self.m_delivery_time = None
 
+        # in preparation for package 9
+        self.m_original_address = address
+        self.m_original_city = city
+        self.m_original_state = state
+        self.m_original_zip = zip
+        self.m_address_update_time = None
+        self.m_original_departure_time = None
+        self.m_original_delivery_time = None
+        self.m_truck = None  # Keep track of which truck it is on
+
     def __str__(self):
         """Returns a string representation of the package's details
 
         :returns
             str: A formatted string containing package information."""
-        return (f"{self.m_ID}, {self.m_address}, {self.m_city}, {self.m_state}, {self.m_zip}, {self.m_deadline}, "
-                f"{self.m_weight}, Delivery time: {self.m_delivery_time}, Departure time: {self.m_departure_time}, "
-                f"{self.m_status}")
+        return self.m_get_status_string(None)
+        # return (f"{self.m_ID}, {self.m_address}, {self.m_city}, {self.m_state}, {self.m_zip}, {self.m_deadline}, "
+        #         f"{self.m_weight}, Delivery time: {self.m_delivery_time}, Departure time: {self.m_departure_time}, "
+        #         f"{self.m_status}")
+
+    def m_get_status_string(self, current_time: datetime.timedelta):
+        address = self.m_address
+        city = self.m_city
+        state = self.m_state
+        intermediate_zip = self.m_zip
+        delivery_time = self.m_delivery_time
+        departure_time = self.m_departure_time
+
+        if self.m_address_update_time and current_time:
+            if current_time < self.m_address_update_time:
+                address = self.m_original_address
+                city = self.m_original_city
+                state = self.m_original_state
+                intermediate_zip = self.m_original_zip
+                delivery_time = self.m_original_delivery_time
+                departure_time = self.m_original_departure_time
+
+        truck_info = f'on Truck #{self.m_truck}' if self.m_truck else 'not assigned'
+        return (f"{self.m_ID}, {address}, {city}, {state}, {intermediate_zip}, "
+                f"{self.m_deadline}, {self.m_weight}, Delivery time: {delivery_time}, "
+                f"Departure time: {departure_time}, {self.m_status}, {truck_info}")
 
     def m_update_status(self, time):
         """
@@ -61,15 +95,30 @@ class Package:
         :arg
             time (datetime.timedelta): The current time for comparison
         """
-        # print(f'Delivery time: {self.m_delivery_time}\nTime: {time}')
-        if self.m_delivery_time < time:
+
+        if self.m_ID == 9 and self.m_address_update_time:
+            if self.m_address_update_time <= time < self.m_departure_time:
+                self.m_status = 'En route to pickup from incorrect address'
+                return
+
+        delivery_time = self.m_original_delivery_time if (
+                    self.m_address_update_time and time < self.m_address_update_time) else self.m_delivery_time
+        departure_time = self.m_original_departure_time if (
+                    self.m_address_update_time and time < self.m_address_update_time) else self.m_departure_time
+
+        if delivery_time and time >= delivery_time:
             self.m_status = "Delivered"
             logging.info(f'Package {self.m_ID} status updated to Delivered.')
-        elif self.m_departure_time > time:
+        elif departure_time and time >= departure_time:
             self.m_status = "En route"
             logging.info(f'Package {self.m_ID} status updated to En route.')
         else:
             self.m_status = "At Hub"
             logging.info(f'Package {self.m_ID} status updated to At hub .')
 
-
+    def update_address(self, new_address, new_city, new_state, new_zip, update_time):
+        self.m_address = new_address
+        self.m_city = new_city
+        self.m_state = new_state
+        self.m_zip = new_zip
+        self.m_address_update_time = update_time
