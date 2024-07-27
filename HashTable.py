@@ -63,6 +63,20 @@ class HashTable:
         :returns: The load factor of the table"""
         return self.m_counter / self.m_capacity
 
+    def m_resize(self):
+        """
+        Resize the hash table when the load factor exceeds the 0.75.
+        This method will double the capacity and rehashes all existing items.
+        """
+        old_buckets = self.m_buckets
+        self.m_capacity *= 2
+        self.m_buckets = [None for _ in range(self.m_capacity)]
+        self.m_counter = 0
+
+        for item in old_buckets:
+            if isinstance(item, HashItem):
+                self.m_insert(item.key, item.value)
+
     def m_insert(self, key, item):
         """
         Inserts a key-value pair into the hash table.
