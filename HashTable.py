@@ -57,6 +57,12 @@ class HashTable:
         self.m_buckets = [None for i in range(capacity)]
         self.m_counter = 0
 
+    def m_load_factor(self):
+        """Calculate the current load factor of the hash table.
+
+        :returns: The load factor of the table"""
+        return self.m_counter / self.m_capacity
+
     def m_insert(self, key, item):
         """
         Inserts a key-value pair into the hash table.
