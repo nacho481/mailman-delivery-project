@@ -37,7 +37,7 @@ class HashTable:
         m_buckets (List[HashItem]): A list containing a hashtable where each entry can be a HashItem.
         m_counter (int): The number of elements present within the hash table
     """
-    def __init__(self, capacity=40):
+    def __init__(self, capacity=80):
         """
         Initializes a HashTable object.
 
