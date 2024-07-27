@@ -94,8 +94,8 @@ class HashTable:
                 - If the hash table is full (load factor exceeds a threshold)
         """
 
-        if self.m_counter > self.m_capacity:  # Check to see if counter is greater than capacity
-            raise RuntimeError('Hashtable is full. Consider increase capacity.')
+        if self.m_load_factor() >= 0.75:  # if the load factor > 0.75, then resize hash table
+            self.m_resize()
 
         item = HashItem(key, item)
         h = hash(key) % self.m_capacity
